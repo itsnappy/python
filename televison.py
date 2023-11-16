@@ -47,7 +47,7 @@ class Television:
         If the TV is on the maximum channel, loop back to the minimum channel.
         """
         if self._status:
-            self._channel = (self._channel + 1) % (self.MAX_CHANNEL + 1)
+            self._channel = (self._channel + 1) % (Television.MAX_CHANNEL + 1)
 
     def channel_down(self) -> None:
         """
@@ -55,7 +55,7 @@ class Television:
         If the TV is on the minimum channel, loop back to the maximum channel.
         """
         if self._status:
-            self._channel = (self._channel - 1) % (self.MAX_CHANNEL + 1)
+            self._channel = (self._channel - 1) % (Television.MAX_CHANNEL + 1)
 
     def volume_up(self) -> None:
         """
@@ -63,7 +63,7 @@ class Television:
         If the TV is on the maximum volume, the volume remains at the maximum.
         """
         if self._status and not self._muted:
-            self._volume = min(self._volume + 1, self.MAX_VOLUME)
+            self._volume = min(self._volume + 1, Television.MAX_VOLUME)
 
     def volume_down(self) -> None:
         """
@@ -71,21 +71,21 @@ class Television:
         If the TV is on the minimum volume, the volume remains at the minimum.
         """
         if self._status and not self._muted:
-            self._volume = max(self._volume - 1, self.MIN_VOLUME)
+            self._volume = max(self._volume - 1, Television.MIN_VOLUME)
 
     def __str__(self) -> str:
-    """
-    Return a formatted string representation of the TV object.
+        """
+        Return a formatted string representation of the TV object.
 
-    Format:
-        If the TV is muted:
-            Power = [status], Muted, Channel = [channel], Volume = [volume]
-        If the TV is not muted:
-            Power = [status], Channel = [channel], Volume = [volume]
+        Format:
+            If the TV is muted:
+                Power = [status], Muted, Channel = [channel], Volume = [volume]
+            If the TV is not muted:
+                Power = [status], Channel = [channel], Volume = [volume]
 
-    The items placed in brackets hold the current values of the TV variables.
-    """
-    if self._muted:
-        return f"Power = [{self._status}], Muted, Channel = [{self._channel}], Volume = [{self._volume}]"
-    else:
-        return f"Power = [{self._status}], Channel = [{self._channel}], Volume = [{self._volume}]"
+        The items placed in brackets hold the current values of the TV variables.
+        """
+        if self._muted:
+            return f"Power = [{self._status}], Muted, Channel = [{self._channel}], Volume = [{self._volume}]"
+        else:
+            return f"Power = [{self._status}], Channel = [{self._channel}], Volume = [{self._volume}]"
