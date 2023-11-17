@@ -1,39 +1,61 @@
 import pytest
 from television import Television
 
-@pytest.fixture
-def tv_instance():
-    return Television()
+# Instantiate a Television object for testing
+tv = Television()
 
-def test_init(tv_instance):
-    assert tv_instance._status == False
-    assert tv_instance._muted == False
-    assert tv_instance._volume == Television.MIN_VOLUME
-    assert tv_instance._channel == Television.MIN_CHANNEL
+def test_power():
+    tv.power()
+    assert str(tv) == "Power = True, Channel = 0, Volume = 0"
 
-def test_power(tv_instance):
-    tv_instance.power()
-    assert tv_instance._status == True
+def test_channel_up():
+    tv.power()
+    tv.channel_up()
+    tv.channel_up()
+    tv.volume_up()
+    assert str(tv) == "Power = True, Channel = 2, Volume = 1"
 
-def test_mute(tv_instance):
-    tv_instance.mute()
-    assert tv_instance._muted == True
+def test_channel_down():
+    tv.power()
+    tv.channel_up()
+    tv.channel_up()
+    tv.channel_up()
+    tv.volume_down()
+    tv.volume_down()
+    assert str(tv) == "Power = True, Channel = 1, Volume = 0"
 
-def test_channel_up(tv_instance):
-    tv_instance.channel_up()
-    assert tv_instance._channel == Television.MIN_CHANNEL + 1
+def test_power_off():
+    tv.power()
+    tv.volume_up()
+    tv.channel_down()
+    assert str(tv) == "Power = False, Channel = 1, Volume = 0"
 
-def test_channel_down(tv_instance):
-    tv_instance.channel_down()
-    assert tv_instance._channel == Television.MAX_CHANNEL
+def test_complex_scenario():
+    tv.power()
+    tv.volume_up()
+    tv.volume_up()
+    tv.volume_up()
+    tv.channel_down()
+    tv.channel_down()
+    assert str(tv) == "Power = True, Channel = 3, Volume = 2"
 
-def test_volume_up(tv_instance):
-    tv_instance.volume_up()
-    assert tv_instance._volume == Television.MIN_VOLUME + 1
+def test_another_television():
+    tv_2 = Television()
+    tv_2.power()
+    tv_2.channel_up()
+    tv_2.volume_up()
+    assert str(tv_2) == "Power = True, Channel = 1, Volume = 1"
 
-def test_volume_down(tv_instance):
-    tv_instance.volume_down()
-    assert tv_instance._volume == Television.MIN_VOLUME
-
-def test_str(tv_instance):
-    assert str(tv_instance) == "Power = [False], Channel = [0], Volume = [0]"
+def test_mute_effect():
+    tv.power()
+    tv.mute()
+    assert str(tv) == "Power = True, Channel = 3, Volume = 0"
+    tv.volume_down()
+    assert str(tv) == "Power = True, Channel = 3, Volume = 1"
+    tv.mute()
+    assert str(tv) == "Power = True, Channel = 3, Volume = 0"
+    tv.volume_up()
+    assert str(tv) == "Power = True, Channel = 3, Volume = 2"
+    tv.power()
+    tv.mute()
+    assert str(tv) == "Power = False, Channel = 3, Volume = 2"
