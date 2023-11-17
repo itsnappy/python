@@ -20,8 +20,8 @@ class Television:
         """
         self._status: bool = False
         self._muted: bool = False
-        self._volume: int = self.MIN_VOLUME
-        self._channel: int = self.MIN_CHANNEL
+        self._volume: int = Television.MIN_VOLUME
+        self._channel: int = Television.MIN_CHANNEL
 
     def power(self) -> None:
         """
@@ -74,15 +74,12 @@ class Television:
             self._volume = max(self._volume - 1, Television.MIN_VOLUME)
 
     def __str__(self) -> str:
-    """
-    Return a formatted string representation of the TV object.
+        """
+        Return a formatted string representation of the TV object.
 
-    Format:
-        Power = [status], Channel = [channel], Volume = [volume]
+        Format:
+            Power = [status], Channel = [channel], Volume = [volume]
 
-    The items placed in brackets hold the current values of the TV variables.
-
-    Returns:
-        str: The formatted string representing the TV object.
-    """
-    return f"Power = {self._status}, Channel = {self._channel}, Volume = {self._volume}"
+        The items placed in brackets hold the current values of the TV variables.
+        """
+        return f"Power = {self._status}, Channel = {self._channel}, Volume = {self._volume}"
