@@ -1,32 +1,18 @@
 class Television:
-    # Class variables
-    MIN_VOLUME: int = 0
-    MAX_VOLUME: int = 2
-    MIN_CHANNEL: int = 0
-    MAX_CHANNEL: int = 3
+    MIN_VOLUME = 0
+    MAX_VOLUME = 2
+    MIN_CHANNEL = 0
+    MAX_CHANNEL = 3
 
-    def __init__(self) -> None:
-        """
-        Initialize a Television object with default values.
-
-        Instance Variables:
-            _status (bool): Represents the power status of the TV.
-            _muted (bool): Represents the mute status of the TV.
-            _volume (int): Represents the volume level of the TV.
-            _channel (int): Represents the channel of the TV.
-
-        The default values are False for status and muted, MIN_VOLUME for volume,
-        and MIN_CHANNEL for channel.
-        """
-        self._status: bool = False
-        self._muted: bool = False
-        self._volume: int = Television.MIN_VOLUME
-        self._channel: int = Television.MIN_CHANNEL
+    def __init__(self):
+        self._status = False
+        self._muted = False
+        self._volume = self.MIN_VOLUME
+        self._channel = self.MIN_CHANNEL
 
     def power(self) -> None:
         """
-        Toggle the power status of the TV.
-        If the TV is off, turn it on; if it's on, turn it off.
+        Turn the TV on or off by changing the value of the status variable.
         """
         self._status = not self._status
 
@@ -38,48 +24,59 @@ class Television:
         it will automatically unmute the TV and adjust the volume accordingly.
         """
         self._muted = not self._muted
+
+        # If any volume-related method is called when muted, unmute and adjust volume
         if self._muted:
-            self._muted = False
+            self._volume = Television.MIN_VOLUME
 
     def channel_up(self) -> None:
         """
-        Increase the TV channel.
-        If the TV is on the maximum channel, loop back to the minimum channel.
+        Increase the TV channel value when the TV is on.
+        If the TV is on the maximum channel and this method is called,
+        it should set the TV channel to the minimum channel.
         """
         if self._status:
-            self._channel = (self._channel + 1) % (Television.MAX_CHANNEL + 1)
+            if self._channel < Television.MAX_CHANNEL:
+                self._channel += 1
+            else:
+                self._channel = Television.MIN_CHANNEL
 
     def channel_down(self) -> None:
         """
-        Decrease the TV channel.
-        If the TV is on the minimum channel, loop back to the maximum channel.
+        Decrease the TV channel value when the TV is on.
+        If the TV is on the minimum channel and this method is called,
+        it should set the TV channel to the maximum channel.
         """
         if self._status:
-            self._channel = (self._channel - 1) % (Television.MAX_CHANNEL + 1)
+            if self._channel > Television.MIN_CHANNEL:
+                self._channel -= 1
+            else:
+                self._channel = Television.MAX_CHANNEL
 
     def volume_up(self) -> None:
         """
         Increase the TV volume.
-        If the TV is on the maximum volume, the volume remains at the maximum.
+        If the TV is on the maximum volume and this method is called,
+        the volume should just remain at the maximum.
         """
         if self._status and not self._muted:
-            self._volume = min(self._volume + 1, Television.MAX_VOLUME)
+            if self._volume < Television.MAX_VOLUME:
+                self._volume += 1
 
     def volume_down(self) -> None:
         """
         Decrease the TV volume.
-        If the TV is on the minimum volume, the volume remains at the minimum.
+        If the TV is on the minimum volume and this method is called,
+        the volume should just remain at the minimum.
+        If muted, unmute and adjust volume.
         """
         if self._status and not self._muted:
-            self._volume = max(self._volume - 1, Television.MIN_VOLUME)
+            if self._volume > Television.MIN_VOLUME:
+                self._volume -= 1
 
     def __str__(self) -> str:
         """
-        Return a formatted string representation of the TV object.
-
-        Format:
-            Power = [status], Channel = [channel], Volume = [volume]
-
-        The items placed in brackets hold the current values of the TV variables.
+        Send the values of the TV object in the format:
+        Power = [status], Channel = [channel], Volume = [volume]
         """
         return f"Power = {self._status}, Channel = {self._channel}, Volume = {self._volume}"
